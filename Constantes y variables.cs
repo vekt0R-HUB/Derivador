@@ -11,6 +11,14 @@ public class Constant:Expresion
     }
     public override Expresion DerivateInVariable(char variable='\0'){return new Constant(0);}
     public override char GetAVariable(){return '\0';}
+    public override Expresion Symplify()
+    {
+        return value;
+    }
+    public override double GetValue()
+    {
+        return value;
+    }
 }
 
 public class Variable:Expresion
@@ -35,5 +43,13 @@ public class Variable:Expresion
     public override char GetAVariable()
     {
         return this.variable;
+    }
+    public override Expresion Symplify()
+    {
+        return new Variable(variable);
+    }
+    public override double GetValue()
+    {
+        throw new Exception("No tiene valor");
     }
 }

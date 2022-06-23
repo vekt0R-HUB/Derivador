@@ -9,6 +9,33 @@ public abstract class Expresion
     public abstract char GetAVariable();
     //obtains the first variable in the expresion
     public int Priotity{get;protected set;}
+
+    static public Expresion operator +(Expresion a, Expresion b)
+    {
+        return new Sum(a,b);
+    }
+    static public Expresion operator -(Expresion a, Expresion b)
+    {
+        return new Diference(a,b);
+    }
+    static public Expresion operator -(Expresion a)
+    {
+        return -1*a;
+    }
+    static public Expresion operator *(Expresion a, Expresion b)
+    {
+        return new Multiplication(a,b);
+    }
+    static public Expresion operator /(Expresion a, Expresion b)
+    {
+        return new Divition(a,b);
+    }
+    public static implicit operator Expresion(double a)
+    {
+        return new Constant(a);
+    }
+    public abstract double GetValue();
+    public abstract Expresion Symplify();
 }
 
 public abstract class UnaryExpresion:Expresion

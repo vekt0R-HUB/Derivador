@@ -1,12 +1,12 @@
 
 namespace MathemathicExpresion;
 
-public class Sen:UnaryExpresion
+public class Sin:UnaryExpresion
 {
-    public Sen(Expresion Internal)
+    public Sin(Expresion Internal)
     {
         InternalExpresion=Internal;
-        ExpresionOperator="sen";
+        ExpresionOperator="sin";
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
@@ -14,15 +14,31 @@ public class Sen:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Multiplication(new Cosen(InternalExpresion),
-        InternalExpresion.DerivateInVariable(variable));
+            return 0;
+        return new Cosin(InternalExpresion)*InternalExpresion.DerivateInVariable(variable);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Sin(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Sin(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Sin(InternalExpresion.GetValue());
     }
 }
 
-public class Cosen:UnaryExpresion
+public class Cosin:UnaryExpresion
 {
-    public Cosen(Expresion Internal)
+    public Cosin(Expresion Internal)
     {
         InternalExpresion=Internal;
         ExpresionOperator="cos";
@@ -33,9 +49,25 @@ public class Cosen:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Multiplication(new Sen(InternalExpresion),
-        new Multiplication(InternalExpresion.DerivateInVariable(variable),new Constant(-1)));
+            return 0;
+        return -InternalExpresion.DerivateInVariable(variable)*new Sin(InternalExpresion);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Cos(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Cosin(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Cos(InternalExpresion.GetValue());
     }
 }
 
@@ -52,9 +84,25 @@ public class Tangent:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Multiplication(new Potence(new Secant(InternalExpresion),2),
-        InternalExpresion.DerivateInVariable(variable));
+            return 0;
+        return new Potence(new Secant(InternalExpresion),2)*InternalExpresion.DerivateInVariable(variable);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Tan(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Tangent(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Tan(InternalExpresion.GetValue());
     }
 }
 
@@ -71,9 +119,25 @@ public class Secant:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Multiplication(new Multiplication(new Secant(InternalExpresion),new Tangent(InternalExpresion)),
-        InternalExpresion.DerivateInVariable(variable));
+            return 0;
+        return new Secant(InternalExpresion)*new Tangent(InternalExpresion)*InternalExpresion.DerivateInVariable(variable);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return 1/Math.Cos(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Secant(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return 1/Math.Cos(InternalExpresion.GetValue());
     }
 }
 
@@ -90,9 +154,25 @@ public class Cotangent:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        Expresion Left=new Multiplication(new Potence(new Cosecant(InternalExpresion),2),new Constant(-1));
-        return new Multiplication(Left,InternalExpresion.DerivateInVariable(variable));
+            return 0;
+        return -InternalExpresion.DerivateInVariable(variable)*new Potence(new Cosecant(InternalExpresion),2);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return 1/Math.Tan(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Cotangent(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return 1/Math.Tan(InternalExpresion.GetValue());
     }
 }
 
@@ -109,9 +189,25 @@ public class Cosecant:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
+            return 0;
         
-        Expresion Left=new Multiplication(new Multiplication(new Cosecant(InternalExpresion),new Cotangent(InternalExpresion)),new Constant(-1));
-        return new Multiplication(Left,InternalExpresion.DerivateInVariable(variable));
+        return -InternalExpresion.DerivateInVariable(variable)*new Cosecant(InternalExpresion)*new Cotangent(InternalExpresion);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return 1/Math.Sin(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Cosecant(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return 1/Math.Sin(InternalExpresion.GetValue());
     }
 }

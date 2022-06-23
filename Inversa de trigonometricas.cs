@@ -14,9 +14,26 @@ public class Arcsen:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Divition(InternalExpresion.DerivateInVariable(variable),
-        new Potence(new Diference(new Constant(1),new Potence(InternalExpresion,2)),2));
+            return 0;
+        return InternalExpresion.DerivateInVariable(variable)/
+        (1-new Potence(new Potence(InternalExpresion,2),0.5));
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Asin(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arcsen(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Asin(InternalExpresion.GetValue());
     }
 }
 
@@ -33,9 +50,26 @@ public class Arccosen:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Multiplication(new Constant(-1),new Divition(InternalExpresion.DerivateInVariable(variable),
-        new Potence(new Diference(new Constant(1),new Potence(InternalExpresion,2)),2)));
+            return 0;
+        return -InternalExpresion.DerivateInVariable(variable)/
+        (1-new Potence(new Potence(InternalExpresion,2),0.5));
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Acos(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arccosen(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Acos(InternalExpresion.GetValue());
     }
 }
 
@@ -52,9 +86,25 @@ public class Arctangent:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Divition(InternalExpresion.DerivateInVariable(variable),
-        new Sum(new Constant(1),new Potence(InternalExpresion,2)));
+            return 0;
+        return InternalExpresion.DerivateInVariable(variable)/(1+new Potence(InternalExpresion,2));
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Atan(Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arctangent(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Atan(InternalExpresion.GetValue());
     }
 }
 
@@ -71,10 +121,27 @@ public class Arcsecant:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Divition(InternalExpresion.DerivateInVariable(variable), new Multiplication(InternalExpresion,
-        new Potence(new Diference(new Constant(1),new Potence(InternalExpresion,2)),2)));
-}
+            return 0;
+        return InternalExpresion.DerivateInVariable(variable)/InternalExpresion*
+        new Potence((1-new Potence(InternalExpresion,2)),0.5);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Acos(1/Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arcsecant(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Acos(1/InternalExpresion.GetValue());
+    }
 }
 
 public class Arccotangent:UnaryExpresion
@@ -90,15 +157,31 @@ public class Arccotangent:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
-        return new Divition(new Multiplication(new Constant(-1),InternalExpresion.DerivateInVariable(variable)),
-        new Sum(new Constant(1),new Potence(InternalExpresion,2)));
+            return 0;
+        return -InternalExpresion.DerivateInVariable(variable)/new Potence(1+InternalExpresion,2);
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Atan(1/Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arccotangent(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Atan(1/InternalExpresion.GetValue());
     }
 }
 
-public class Arcosecant:UnaryExpresion
+public class Arccosecant:UnaryExpresion
 {
-    public Arcosecant(Expresion Internal)
+    public Arccosecant(Expresion Internal)
     {
         InternalExpresion=Internal;
         ExpresionOperator="secant";
@@ -109,10 +192,27 @@ public class Arcosecant:UnaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
+            return 0;
         
-        return new Divition(new Multiplication(new Constant(-1),InternalExpresion.DerivateInVariable(variable)),
-        new Potence(new Diference(new Constant(1),new Potence(InternalExpresion,2)),2));
+        return -InternalExpresion.DerivateInVariable(variable)/InternalExpresion*
+        new Potence(1-new Potence(InternalExpresion,2),0.5);
     
+    }
+    public override Expresion Symplify()
+    {
+        Expresion Internal=InternalExpresion.Symplify();
+        try
+        {
+            return Math.Asin(1/Internal.GetValue());
+        }
+
+        catch
+        {
+            return new Arccosecant(Internal);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Asin(1/InternalExpresion.GetValue());
     }
 }

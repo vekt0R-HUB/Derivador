@@ -11,15 +11,23 @@ public class Potence:BinaryExpresion
     }
     public Potence(Expresion Exponent)
     {
-        LeftExpresion=new Constant(System.Math.E);
+        LeftExpresion=System.Math.E;
         RigthExpresion=Exponent;
         ExpresionOperator="e^";
         Priotity=2;
     }
-    public Potence(Expresion Base,int Exponent)
+    public Potence(Expresion Base,double Exponent)
     {
+        if(Exponent==0 && !base.Equals(0))
+        {
+            LeftExpresion=1;
+            RigthExpresion=1;
+            ExpresionOperator="^";
+            Priotity=3;
+
+        }
         LeftExpresion=Base;
-        RigthExpresion=new Constant(Exponent);
+        RigthExpresion=Exponent;
         ExpresionOperator="^"+Exponent;
         Priotity=3;
     }
@@ -38,19 +46,54 @@ public class Potence:BinaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
+            return 0;
 
         if(ExpresionOperator=="e^")
-            return new Multiplication(RigthExpresion.DerivateInVariable(variable),new Potence(RigthExpresion));
+            return RigthExpresion.DerivateInVariable(variable)*new Potence(RigthExpresion);
         if(ExpresionOperator.Length>1)
         {
-            int Exponent=int.Parse(ExpresionOperator.Remove(0,1));
-            Expresion left = new Multiplication(new Constant(Exponent),new Potence(LeftExpresion,Exponent-1));
-            return (new Multiplication(left, LeftExpresion.DerivateInVariable(variable)));
+            double Exponent=double.Parse(ExpresionOperator.Remove(0,1));
+            Expresion left = Exponent*new Potence(LeftExpresion,(Exponent-1));
+            return left*LeftExpresion.DerivateInVariable(variable);
         }
         
-        Expresion Left = new Multiplication(RigthExpresion,new Logaritm(LeftExpresion));
-        return new Multiplication(Left.DerivateInVariable(variable),new Potence(LeftExpresion,RigthExpresion));
+        Expresion Left = RigthExpresion*new Logaritm(LeftExpresion);
+        return Left.DerivateInVariable(variable)*new Potence(LeftExpresion,RigthExpresion);
+    }
+
+    
+    public override Expresion Symplify()
+    {
+        Expresion Left = LeftExpresion.Symplify();
+        Expresion Right = RigthExpresion.Symplify();
+        try
+        {
+            double l=Left.GetValue();
+            if(l==0)
+                return 0;
+            if(l==1)
+                return 1;
+            return Math.Pow(l,Right.GetValue());
+        }
+        
+        catch
+        {
+            try
+            {
+                double r=Right.GetValue();
+                if(r==0)
+                    return 1;
+                if(r==1)
+                    return Left;
+            }catch{}
+            if(ExpresionOperator=="e^")
+                return new Potence(Right);
+            return new Potence(Left,Right);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Pow(LeftExpresion.GetValue(),RigthExpresion.GetValue());
     }
 }
 
@@ -62,17 +105,17 @@ public class Logaritm:BinaryExpresion
         RigthExpresion=Rigth;
         ExpresionOperator="log";
         if(Left==new Constant(System.Math.E))
-        ExpresionOperator="ln";
+            ExpresionOperator="ln";
         Priotity=3;
     }
     public Logaritm(Expresion Rigth)
     {
-        LeftExpresion=new Constant(System.Math.E);
+        LeftExpresion=System.Math.E;
         RigthExpresion=Rigth;
         ExpresionOperator="ln";
         Priotity=2;
     }
-    public Logaritm(Expresion Rigth,int Base)
+    public Logaritm(Expresion Rigth,double Base)
     {
         LeftExpresion=new Constant(Base);
         RigthExpresion=Rigth;
@@ -93,23 +136,43 @@ public class Logaritm:BinaryExpresion
         if(variable=='\0')
             variable=GetAVariable();
         if(variable=='\0')
-            return new Constant(0);
+            return 0;
         
         if(ExpresionOperator=="ln")
-        {
-            Expresion Left=RigthExpresion.DerivateInVariable(variable);
-            return new Divition(Left,RigthExpresion);
-        }
+            return RigthExpresion.DerivateInVariable(variable)/RigthExpresion;
+        
         if(ExpresionOperator.Length>3)
         {
-            int Base = int.Parse(ExpresionOperator.Remove(0,4).Remove(0,1));
-            Expresion Left=new Divition(new Constant(1),new Logaritm(new Constant(Base)));
-            Expresion Rigth = new Divition(RigthExpresion.DerivateInVariable(variable),RigthExpresion);
-            return new Multiplication(Left,Rigth);
+            double Base = double.Parse(ExpresionOperator.Remove(0,4).Remove(ExpresionOperator.Length-1));
+            return RigthExpresion.DerivateInVariable(variable)/(RigthExpresion*new Logaritm(Base));
         }
         
-        Expresion divition = new Divition(new Logaritm(RigthExpresion),new Logaritm(LeftExpresion));
+        Expresion divition = new Logaritm(RigthExpresion)/new Logaritm(LeftExpresion);
         return divition.DerivateInVariable(variable);
+    }
+
+    public override Expresion Symplify()
+    {
+        Expresion Left = LeftExpresion.Symplify();
+        Expresion Right = RigthExpresion.Symplify();
+        try
+        {
+            double r=Right.GetValue();
+            if(r==1)
+                return 0;
+            return Math.Log(r,Left.GetValue());
+        }
+        
+        catch
+        {
+            if(Left.Equals(Right))
+                return 1;
+            return new Logaritm(Left,Right);
+        }
+    }
+    public override double GetValue()
+    {
+        return Math.Log(RigthExpresion.GetValue(),LeftExpresion.GetValue());
     }
 }
 
