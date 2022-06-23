@@ -36,6 +36,8 @@ public abstract class Expresion
     }
     public abstract double GetValue();
     public abstract Expresion Symplify();
+
+    public abstract Expresion Evaluate(char variable, double valor);
 }
 
 public abstract class UnaryExpresion:Expresion

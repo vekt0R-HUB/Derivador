@@ -95,6 +95,13 @@ public class Potence:BinaryExpresion
     {
         return Math.Pow(LeftExpresion.GetValue(),RigthExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        if(ExpresionOperator=="e^")
+            return new Potence(RigthExpresion.Evaluate(variable,valor));
+        return new Potence(LeftExpresion.Evaluate(variable,valor),RigthExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Logaritm:BinaryExpresion
@@ -173,6 +180,13 @@ public class Logaritm:BinaryExpresion
     public override double GetValue()
     {
         return Math.Log(RigthExpresion.GetValue(),LeftExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        if(ExpresionOperator=="ln")
+            return new Logaritm(RigthExpresion.Evaluate(variable,valor));
+        return new Logaritm(LeftExpresion.Evaluate(variable,valor),RigthExpresion.Evaluate(variable,valor));
     }
 }
 

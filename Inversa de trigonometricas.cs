@@ -35,6 +35,11 @@ public class Arcsen:UnaryExpresion
     {
         return Math.Asin(InternalExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arcsen(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Arccosen:UnaryExpresion
@@ -71,6 +76,10 @@ public class Arccosen:UnaryExpresion
     {
         return Math.Acos(InternalExpresion.GetValue());
     }
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arccosen(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Arctangent:UnaryExpresion
@@ -105,6 +114,11 @@ public class Arctangent:UnaryExpresion
     public override double GetValue()
     {
         return Math.Atan(InternalExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arctangent(InternalExpresion.Evaluate(variable,valor));
     }
 }
 
@@ -142,6 +156,11 @@ public class Arcsecant:UnaryExpresion
     {
         return Math.Acos(1/InternalExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arcsecant(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Arccotangent:UnaryExpresion
@@ -176,6 +195,10 @@ public class Arccotangent:UnaryExpresion
     public override double GetValue()
     {
         return Math.Atan(1/InternalExpresion.GetValue());
+    }
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arccotangent(InternalExpresion.Evaluate(variable,valor));
     }
 }
 
@@ -214,5 +237,10 @@ public class Arccosecant:UnaryExpresion
     public override double GetValue()
     {
         return Math.Asin(1/InternalExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Arccosecant(InternalExpresion.Evaluate(variable,valor));
     }
 }

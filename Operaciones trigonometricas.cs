@@ -34,6 +34,11 @@ public class Sin:UnaryExpresion
     {
         return Math.Sin(InternalExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Sin(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Cosin:UnaryExpresion
@@ -68,6 +73,11 @@ public class Cosin:UnaryExpresion
     public override double GetValue()
     {
         return Math.Cos(InternalExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Cosin(InternalExpresion.Evaluate(variable,valor));
     }
 }
 
@@ -104,6 +114,11 @@ public class Tangent:UnaryExpresion
     {
         return Math.Tan(InternalExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Tangent(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Secant:UnaryExpresion
@@ -138,6 +153,11 @@ public class Secant:UnaryExpresion
     public override double GetValue()
     {
         return 1/Math.Cos(InternalExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Secant(InternalExpresion.Evaluate(variable,valor));
     }
 }
 
@@ -174,6 +194,11 @@ public class Cotangent:UnaryExpresion
     {
         return 1/Math.Tan(InternalExpresion.GetValue());
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Cotangent(InternalExpresion.Evaluate(variable,valor));
+    }
 }
 
 public class Cosecant:UnaryExpresion
@@ -209,5 +234,10 @@ public class Cosecant:UnaryExpresion
     public override double GetValue()
     {
         return 1/Math.Sin(InternalExpresion.GetValue());
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return new Cosecant(InternalExpresion.Evaluate(variable,valor));
     }
 }

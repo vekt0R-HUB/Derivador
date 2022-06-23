@@ -46,6 +46,11 @@ public class Sum:BinaryExpresion
     {
         return LeftExpresion.GetValue()+RigthExpresion.GetValue();
     }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return LeftExpresion.Evaluate(variable,valor)+RigthExpresion.Evaluate(variable,valor);
+    }
 }
 
 public class Diference:BinaryExpresion
@@ -93,6 +98,10 @@ public class Diference:BinaryExpresion
     public override double GetValue()
     {
         return LeftExpresion.GetValue()-RigthExpresion.GetValue();
+    }
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return LeftExpresion.Evaluate(variable,valor)-RigthExpresion.Evaluate(variable,valor);
     }
 }
 
@@ -146,6 +155,11 @@ public class Multiplication:BinaryExpresion
     public override double GetValue()
     {
         return LeftExpresion.GetValue()*RigthExpresion.GetValue();
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return LeftExpresion.Evaluate(variable,valor)*RigthExpresion.Evaluate(variable,valor);
     }
 }
 
@@ -202,5 +216,10 @@ public class Divition:BinaryExpresion
     public override double GetValue()
     {
         return LeftExpresion.GetValue()/RigthExpresion.GetValue();
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return LeftExpresion.Evaluate(variable,valor)/RigthExpresion.Evaluate(variable,valor);
     }
 }

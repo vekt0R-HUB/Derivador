@@ -19,6 +19,10 @@ public class Constant:Expresion
     {
         return value;
     }
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        return value;
+    }
 }
 
 public class Variable:Expresion
@@ -51,5 +55,12 @@ public class Variable:Expresion
     public override double GetValue()
     {
         throw new Exception("No tiene valor");
+    }
+    
+    public override Expresion Evaluate(char variable, double valor)
+    {
+        if(this.variable==variable)
+            return valor;
+        return new Variable(this.variable);
     }
 }
