@@ -9,7 +9,9 @@ public class Program
         var t = new Variable('a');
         var r = new Multiplication(s,t);
         var p = new Sin(r);
+        var x = new Sum(r,s);
+        var y = new Potence(new Constant(Math.E),x);
 
-        System.Console.WriteLine(p.DerivateInVariable().Symplify());
+        System.Console.WriteLine(y.DerivateInVariable().Symplify());
     }
 }
