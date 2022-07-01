@@ -1,6 +1,7 @@
 namespace MathemathicExpresion;
 
 public class Potence:BinaryExpresion
+//includes the forms f^a, a^f, f^g
 {
     public Potence(Expresion Left, Expresion Rigth)
     {
@@ -42,6 +43,9 @@ public class Potence:BinaryExpresion
     }
 
     public override Expresion DerivateInVariable(char variable='\0')
+    //Case 1: (f^a)'=af'f^(a-1)
+    //Case 2: (a^f)'=f'*a^f*lna
+    //Case 3: (f^g)'=(f'g/f+g'lnf)*f^g
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -51,6 +55,7 @@ public class Potence:BinaryExpresion
         if(ExpresionOperator=="e^")
             return RigthExpresion.DerivateInVariable(variable)*new Potence(RigthExpresion);
         if(ExpresionOperator.Length>1)
+        //Case 2
         {
             double Exponent=double.Parse(ExpresionOperator.Remove(0,1));
             Expresion left = Exponent*new Potence(LeftExpresion,(Exponent-1));
@@ -69,9 +74,9 @@ public class Potence:BinaryExpresion
         try
         {
             double l=Left.GetValue();
-            if(l==0)
+            if(l==0)//case 0^f
                 return 0;
-            if(l==1)
+            if(l==1)//case 1^f
                 return 1;
             return Math.Pow(l,Right.GetValue());
         }
@@ -81,10 +86,11 @@ public class Potence:BinaryExpresion
             try
             {
                 double r=Right.GetValue();
-                if(r==0)
+                if(r==0)//case f^0
                     return 1;
-                if(r==1)
+                if(r==1)//case f^1
                     return Left;
+                return new Potence(Left,r);
             }catch{}
             if(ExpresionOperator=="e^")
                 return new Potence(Right);
@@ -111,7 +117,7 @@ public class Logaritm:BinaryExpresion
         LeftExpresion=Left;
         RigthExpresion=Rigth;
         ExpresionOperator="log";
-        if(Left==new Constant(System.Math.E))
+        if(Left.Equals(System.Math.E))
             ExpresionOperator="ln";
         Priotity=3;
     }
@@ -139,6 +145,9 @@ public class Logaritm:BinaryExpresion
             return ExpresionOperator+"["+LeftExpresion+"]"+"("+RigthExpresion+")";
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //Case 1: Ln'(f)=f'/f
+    //Case 2: Log'[a](f)=f'/(f*ln(a))
+    //Case 3: Log'[f](g)=(ln(f)/ln(g))'=(f'ln(g)/f + ln(f)*g'/g)/ln^2(g)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -165,14 +174,14 @@ public class Logaritm:BinaryExpresion
         try
         {
             double r=Right.GetValue();
-            if(r==1)
+            if(r==1)//case log[f](1)
                 return 0;
             return Math.Log(r,Left.GetValue());
         }
         
         catch
         {
-            if(Left.Equals(Right))
+            if(Left.Equals(Right))//case log[f](f)
                 return 1;
             return new Logaritm(Left,Right);
         }

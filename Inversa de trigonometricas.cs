@@ -1,6 +1,8 @@
 
 namespace MathemathicExpresion;
 
+//for all of this funtion the structure is more or less the same
+
 public class Arcsen:UnaryExpresion
 {
     public Arcsen(Expresion Internal)
@@ -10,6 +12,7 @@ public class Arcsen:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arcsen'(f)= f'/(1-f)^(1/2)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -51,6 +54,7 @@ public class Arccosen:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arccos'(f)= -f'/(1-f)^(1/2)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -91,6 +95,7 @@ public class Arctangent:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arctan'(f)= f'/(1+f^2)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -131,6 +136,7 @@ public class Arcsecant:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arcsec'(f)= f'/(f(1-f)^(1/2))
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -172,6 +178,7 @@ public class Arccotangent:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arccot'(f)= -f'/(1+f^2)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -211,6 +218,7 @@ public class Arccosecant:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //arccsc'(f)= -f'/(f(1-f)^(1/2))
     {
         if(variable=='\0')
             variable=GetAVariable();

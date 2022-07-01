@@ -1,5 +1,6 @@
-
 namespace MathemathicExpresion;
+
+//for all of this funtion the structure is more or less the same
 
 public class Sin:UnaryExpresion
 {
@@ -10,6 +11,7 @@ public class Sin:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //sen'(f)=cos(f)*f'
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -50,6 +52,7 @@ public class Cosin:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //cos'(f)=-f'sen(f)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -90,6 +93,7 @@ public class Tangent:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //tan'(f)=f'sec^2(f)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -130,6 +134,7 @@ public class Secant:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //sec'(f)=f'tan(f)sec(f)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -170,6 +175,7 @@ public class Cotangent:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //cot'(f)=-f'csc^2(f)
     {
         if(variable=='\0')
             variable=GetAVariable();
@@ -210,6 +216,7 @@ public class Cosecant:UnaryExpresion
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
+    //csc'(f)=-f'cot(f)csc(f)
     {
         if(variable=='\0')
             variable=GetAVariable();
