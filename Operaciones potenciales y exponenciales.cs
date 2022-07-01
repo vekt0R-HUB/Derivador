@@ -108,6 +108,7 @@ public class Potence:BinaryExpresion
             return new Potence(RigthExpresion.Evaluate(variable,valor));
         return new Potence(LeftExpresion.Evaluate(variable,valor),RigthExpresion.Evaluate(variable,valor));
     }
+    public override Expresion Modify(Expresion newInternal){return new Potence(LeftExpresion,newInternal);}
 }
 
 public class Logaritm:BinaryExpresion
@@ -197,5 +198,7 @@ public class Logaritm:BinaryExpresion
             return new Logaritm(RigthExpresion.Evaluate(variable,valor));
         return new Logaritm(LeftExpresion.Evaluate(variable,valor),RigthExpresion.Evaluate(variable,valor));
     }
+    
+    public override Expresion Modify(Expresion newInternal){return new Logaritm(LeftExpresion,newInternal);}
 }
 

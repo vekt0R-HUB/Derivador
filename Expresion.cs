@@ -32,6 +32,8 @@ public abstract class Expresion
     //Symplifys the expresion, nothing to comment
     public abstract Expresion Evaluate(char variable, double valor);
     //Change the variable for the value
+
+    public abstract Expresion Modify(Expresion newInternal);
 }
 
 public abstract class UnaryExpresion:Expresion
@@ -79,4 +81,5 @@ public abstract class BinaryExpresion:Expresion
             return RigthExpresion.GetAVariable();
         return variable;
     }
+
 }

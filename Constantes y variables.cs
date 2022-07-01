@@ -22,6 +22,8 @@ public class Constant:Expresion
     public override Expresion Symplify(){return value;}
     public override double GetValue(){return value;}
     public override Expresion Evaluate(char variable, double valor){return value;}
+    
+    public override Expresion Modify(Expresion newInternal){return newInternal;}
 }
 
 public class Variable:Expresion
@@ -64,4 +66,5 @@ public class Variable:Expresion
             return valor;
         return new Variable(this.variable);
     }
+    public override Expresion Modify(Expresion newInternal){return newInternal;}
 }

@@ -43,6 +43,11 @@ public class Arcsen:UnaryExpresion
     {
         return new Arcsen(InternalExpresion.Evaluate(variable,valor));
     }
+
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arcsen(newInternal);
+    }
 }
 
 public class Arccosen:UnaryExpresion
@@ -84,6 +89,11 @@ public class Arccosen:UnaryExpresion
     {
         return new Arccosen(InternalExpresion.Evaluate(variable,valor));
     }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arccosen(newInternal);
+    }
 }
 
 public class Arctangent:UnaryExpresion
@@ -124,6 +134,11 @@ public class Arctangent:UnaryExpresion
     public override Expresion Evaluate(char variable, double valor)
     {
         return new Arctangent(InternalExpresion.Evaluate(variable,valor));
+    }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arctangent(newInternal);
     }
 }
 
@@ -167,6 +182,11 @@ public class Arcsecant:UnaryExpresion
     {
         return new Arcsecant(InternalExpresion.Evaluate(variable,valor));
     }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arcsecant(newInternal);
+    }
 }
 
 public class Arccotangent:UnaryExpresion
@@ -174,7 +194,7 @@ public class Arccotangent:UnaryExpresion
     public Arccotangent(Expresion Internal)
     {
         InternalExpresion=Internal;
-        ExpresionOperator="cot";
+        ExpresionOperator="arccot";
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
@@ -207,6 +227,11 @@ public class Arccotangent:UnaryExpresion
     {
         return new Arccotangent(InternalExpresion.Evaluate(variable,valor));
     }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arccotangent(newInternal);
+    }
 }
 
 public class Arccosecant:UnaryExpresion
@@ -214,7 +239,7 @@ public class Arccosecant:UnaryExpresion
     public Arccosecant(Expresion Internal)
     {
         InternalExpresion=Internal;
-        ExpresionOperator="secant";
+        ExpresionOperator="arccsc";
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
@@ -250,5 +275,10 @@ public class Arccosecant:UnaryExpresion
     public override Expresion Evaluate(char variable, double valor)
     {
         return new Arccosecant(InternalExpresion.Evaluate(variable,valor));
+    }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Arccosecant(newInternal);
     }
 }

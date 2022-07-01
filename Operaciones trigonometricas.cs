@@ -41,6 +41,10 @@ public class Sin:UnaryExpresion
     {
         return new Sin(InternalExpresion.Evaluate(variable,valor));
     }
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Sin(newInternal);
+    }
 }
 
 public class Cosin:UnaryExpresion
@@ -82,6 +86,10 @@ public class Cosin:UnaryExpresion
     {
         return new Cosin(InternalExpresion.Evaluate(variable,valor));
     }
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Cosin(newInternal);
+    }
 }
 
 public class Tangent:UnaryExpresion
@@ -89,7 +97,7 @@ public class Tangent:UnaryExpresion
     public Tangent(Expresion Internal)
     {
         InternalExpresion=Internal;
-        ExpresionOperator="cos";
+        ExpresionOperator="tan";
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
@@ -122,6 +130,11 @@ public class Tangent:UnaryExpresion
     public override Expresion Evaluate(char variable, double valor)
     {
         return new Tangent(InternalExpresion.Evaluate(variable,valor));
+    }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Tangent(newInternal);
     }
 }
 
@@ -164,6 +177,11 @@ public class Secant:UnaryExpresion
     {
         return new Secant(InternalExpresion.Evaluate(variable,valor));
     }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Secant(newInternal);
+    }
 }
 
 public class Cotangent:UnaryExpresion
@@ -205,6 +223,10 @@ public class Cotangent:UnaryExpresion
     {
         return new Cotangent(InternalExpresion.Evaluate(variable,valor));
     }
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Cotangent(newInternal);
+    }
 }
 
 public class Cosecant:UnaryExpresion
@@ -212,7 +234,7 @@ public class Cosecant:UnaryExpresion
     public Cosecant(Expresion Internal)
     {
         InternalExpresion=Internal;
-        ExpresionOperator="secant";
+        ExpresionOperator="csc";
         Priotity=2;
     }
     public override Expresion DerivateInVariable(char variable='\0')
@@ -246,5 +268,10 @@ public class Cosecant:UnaryExpresion
     public override Expresion Evaluate(char variable, double valor)
     {
         return new Cosecant(InternalExpresion.Evaluate(variable,valor));
+    }
+    
+    public override Expresion Modify(Expresion newInternal)
+    {
+        return new Cosecant(newInternal);
     }
 }
