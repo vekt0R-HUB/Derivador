@@ -1,0 +1,593 @@
+﻿
+@page "/"
+
+<PageTitle>Derivador</PageTitle>
+
+
+<h1>Calculadora de Derivadas</h1>
+<h2>@actualVarDerive</h2>
+
+<div class="container">
+    <div class="row">
+        <div style="overflow:auto; overflow-x:hidden;height:250px; border: double;">
+            @for (int i = 0; i < ExpresionsString.Count(); i++)
+            {
+                @if(i==0){
+                    <h2>@ExpresionsString[i]</h2>
+                }
+                else{
+                    <h2>args: @ExpresionsString[i]</h2>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row" style="padding-top: 20px;">
+        <div class="col-2">
+            <div class="Trig">
+                <button type="button" class="btn btn-primary" @onclick="MakeSin">sin</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeCos">cos</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeTan">tan</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeCotangent">cot</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeSecant">sec</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeCosecant">csc</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArcsen">arcsen</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArccosen">arccos</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArctangent">arctan</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArccotangent">arccot</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArcsecant">arcsec</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeArccosecant">arccsc</button>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="Variales">
+                <button type="button" class="btn btn-primary" @onclick="VarX">X</button>
+                <button type="button" class="btn btn-primary" @onclick="VarY">Y</button>
+                <button type="button" class="btn btn-primary" @onclick="VarZ">Z</button>
+                <button type="button" class="btn btn-primary" @onclick="VarT">T</button>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="Numbers">
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make0">0</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make1">1</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make2">2</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make3">3</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make4">4</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make5">5</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make6">6</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make7">7</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make8">8</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="Make9">9</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisabledNum()" @onclick="MakeEuler">e</button>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="Opertors">
+                <button type="button" class="btn btn-primary" disabled = "@DisableOper()" @onclick="MakeSum">+</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisableOper()" @onclick="MakeSubs">-</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisableOper()" @onclick="MakeProd">*</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisableOper()" @onclick="MakeDiv">/</button>
+                <button type="button" class="btn btn-primary" disabled = "@DisableOper()" @onclick="MakePow">^</button>
+                <button type="button" class="btn btn-primary" @onclick="MakeLog">log</button>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="Settings">
+                <button type="button" class="btn btn-primary" @onclick="Enter">Enter</button>
+                <button type="button" class="btn btn-primary" @onclick="Clear">Clear</button>
+                <button type="button" class="btn btn-primary" @onclick="Derive">Derive <span class="badge text-bg-secondary">@VariablesChar.Count()</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code{
+    private List<Expresion> Values{get;set;} = new List<Expresion>();
+    private List<string> ExpresionsString{get;set;} = new List<string>();
+    private List<char> VariablesChar{get;set;} = new List<char>();
+    private string actualVarDerive = "";
+    private int CountDerive = 0;
+    private string Number="";
+    
+    
+    private bool DisableOper()
+    {
+        if(Values.Count > 0){
+            foreach (var item in typeof(BinaryExpresion).Assembly.GetTypes().Where(t=>t.BaseType==typeof(BinaryExpresion)))
+            {
+                if(Values.Last().GetType() == item && (((BinaryExpresion)(Values.Last())).ExpressionNULL()) && Number.Length == 0)
+                    return true;
+            }
+        }
+        return false;
+    }
+    private bool DisabledNum()
+    {
+        return (Values.Count > 0 && (Values.Last() is Variable));
+    }
+    #region Settings
+        private void Enter()
+        {
+            if(Number.Length != 0)
+            {
+                Values.Add(double.Parse(Number));
+                Number= string.Empty;
+            }
+            if(Values.Count() > 1)
+            {
+                Values[Values.Count-2] = Values[Values.Count-2].Modify(Values.Last());
+                Values.Remove(Values.Last());
+                ExpresionsString[ExpresionsString.Count-2] = Values.Last().ToString();
+                ExpresionsString.Remove(ExpresionsString.Last());
+            }
+            else{
+                Values[Values.Count-1] = Values[Values.Count-1].Modify(Values.Last());
+            }
+        }
+        private void Clear()
+        {
+            Values= new List<Expresion>();
+            ExpresionsString = new List<string>();
+            CountDerive = 0;
+            actualVarDerive = "";
+            VariablesChar = new List<char>();
+        }
+        private void Derive()
+        {
+            if(Number.Length != 0 && Values.Count == 0)
+            {
+                Values.Add(double.Parse(Number));
+                Number= string.Empty;
+                ExpresionsString[0] = Values[0].DerivateInVariable('X').ToString();
+
+            }
+            else if(Values.Count == 1 && CountDerive < VariablesChar.Count())
+            {
+                actualVarDerive="Derivando en " + VariablesChar[CountDerive];
+                ExpresionsString[0] = Values[0].Symplify().DerivateInVariable(VariablesChar[CountDerive++]).Symplify().ToString();
+            }
+            else if(Values.Count == 1 && CountDerive < VariablesChar.Count)
+            {
+                ExpresionsString[0] = Values[0].Symplify().DerivateInVariable(VariablesChar.First()).Symplify().ToString();
+            }
+
+        }
+        private void CreateArgs()
+        {
+            ExpresionsString.Add("");
+        }
+    #endregion
+    #region Base Operators
+        private void MakeSum()
+        {
+            if(Values.Any())
+            {
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+
+                Expresion sum = new Sum(Values.Last(), null);
+                
+                Values[Values.Count-1] = sum;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+
+                CreateArgs();
+            }
+        }
+        private void MakeSubs()
+        {
+            if(Values.Any())
+            {
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+                
+                Expresion dif = new Diference(Values.Last(), null);
+                
+                Values[Values.Count-1] = dif;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+
+                CreateArgs();
+            }
+        }
+        private void MakeProd()
+        {
+            if(Values.Any())
+            {
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+
+                Expresion prod = new Multiplication(Values.Last(), null);
+                
+                Values[Values.Count-1] = prod;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+
+                CreateArgs();
+            }
+        }
+        private void MakeDiv()
+        {
+            if(Values.Any())
+            {
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+
+                Expresion div = new Divition(Values.Last(), null);
+                
+                Values[Values.Count-1] = div;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+
+                CreateArgs();
+            }
+        }
+        private void MakePow()
+        {
+            Expresion pow;
+            if(Values.Any() || Number.Length != 0){
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+
+                pow = new Pow(Values.Last(), null); 
+
+                Values[Values.Count-1] = pow;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            else{
+                pow = new Pow(null);
+                Values.Add(pow);
+                ExpresionsString.Add(pow.ToString());
+            }
+            CreateArgs();
+        }
+        private void MakeLog()
+        {
+            Expresion log;
+            if((Values.Any() || Number.Length != 0) && !DisableOper()){
+                if(Number.Length != 0)
+                {
+                    Values.Add(double.Parse(Number));
+                    Number= string.Empty;
+                }
+
+                log = new Logarithm(Values.Last(), null); 
+                    
+                Values[Values.Count-1] = log;
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            else{
+                log = new Logarithm(null);
+                Values.Add(log);
+                if(ExpresionsString.Count() > 0)
+                    ExpresionsString.Remove(ExpresionsString.Last());
+                ExpresionsString.Add(log.ToString());
+            }
+            CreateArgs();
+        }
+    #endregion
+    #region Numbers and Variables
+        private void VarX()
+        {
+            if(!VariablesChar.Contains('X')){
+                VariablesChar.Add('X');
+            }
+
+            Expresion a = new Variable('X');
+            Values.Add(a);
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(a.ToString());
+
+        }
+        private void VarY()
+        {
+            if(!VariablesChar.Contains('Y')){
+                VariablesChar.Add('Y');
+            }
+            Expresion a = new Variable('Y');
+            Values.Add(a);
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(a.ToString());
+        }
+        private void VarZ()
+        {
+            if(!VariablesChar.Contains('Z')){
+                VariablesChar.Add('Z');
+            }
+            Expresion a = new Variable('Z');
+            Values.Add(a);
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(a.ToString());
+        }
+        private void VarT()
+        {
+            if(!VariablesChar.Contains('T')){
+                VariablesChar.Add('T');
+            }
+            Expresion a = new Variable('T');
+            Values.Add(a);
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(a.ToString());
+        }
+        private void MakeEuler()
+        {
+            Expresion e = Math.E;
+            Values.Add(e);
+            ExpresionsString.Add(e.ToString());
+        }
+        private void Make1()
+        {
+            Number+="1";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make2()
+        {
+            Number+="2";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make3()
+        {
+            Number+="3";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make4()
+        {
+            Number+="4";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make5()
+        {
+            Number+="5";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make6()
+        {
+            Number+="6";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make7()
+        {
+            Number+="7";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make8()
+        {
+            Number+="8";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make9()
+        {
+            Number+="9";
+            if(ExpresionsString.Count() > 0)
+                ExpresionsString.Remove(ExpresionsString.Last());
+            ExpresionsString.Add(Number);
+        }
+        private void Make0()
+        {
+            if(Number.Length != 0){
+                Number+="0";
+                if(ExpresionsString.Count() > 0)
+                    ExpresionsString.Remove(ExpresionsString.Last());
+                ExpresionsString.Add(Number);
+            }
+        }
+    #endregion
+    #region Operaciones Trigonometricas
+        private void MakeSin()
+        {
+            Expresion a = new Sin(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeCos()
+        {
+            Expresion a = new Cosin(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeTan()
+        {
+            Expresion a = new Tangent(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeCotangent()
+        {
+            Expresion a = new Cotangent(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeSecant()
+        {
+            Expresion a = new Secant(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeCosecant()
+        {
+            Expresion a = new Cosecant(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArcsen()
+        {
+            Expresion a = new Arcsen(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArccosen()
+        {
+            Expresion a = new Arccosen(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArctangent()
+        {
+            Expresion a = new Arctangent(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArccotangent()
+        {
+            Expresion a = new Arccotangent(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArcsecant()
+        {
+            Expresion a = new Arcsecant(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+        private void MakeArccosecant()
+        {
+            Expresion a = new Arccosecant(null);
+            if(Values.Count()==0)
+            {
+                Values.Add(a);
+                ExpresionsString.Add(a.ToString());
+            }
+            else
+            {
+                Values.Add(a);
+                ExpresionsString[ExpresionsString.Count-1] = Values.Last().ToString();
+            }
+            CreateArgs();
+        }
+    #endregion
+}
