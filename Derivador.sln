@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor", "Blazor\Blazor.csproj", "{A9880A15-F2AA-4239-99D0-0FC2CC9363F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathemathicExpresion", "Calc\MathemathicExpresion.csproj", "{ADFF7282-BB81-4F9F-A223-ACEE887F4A48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +14,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9880A15-F2AA-4239-99D0-0FC2CC9363F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9880A15-F2AA-4239-99D0-0FC2CC9363F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9880A15-F2AA-4239-99D0-0FC2CC9363F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9880A15-F2AA-4239-99D0-0FC2CC9363F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADFF7282-BB81-4F9F-A223-ACEE887F4A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADFF7282-BB81-4F9F-A223-ACEE887F4A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADFF7282-BB81-4F9F-A223-ACEE887F4A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADFF7282-BB81-4F9F-A223-ACEE887F4A48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
